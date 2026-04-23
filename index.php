@@ -11,7 +11,7 @@ $filieres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Gestion des étudiants</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
@@ -44,6 +44,49 @@ $filieres = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <button type="submit" class="btn">Ajouter</button>
             </form>
         </div>
+        <!-- Tableau des étudiants -->
+<div class="table-section">
+    <h2>Liste des étudiants</h2>
+    <?php
+    $stmt = $pdo->query("
+        SELECT e.id, e.nom, e.prenom, f.nom AS filiere 
+        FROM etudiants e 
+        JOIN filieres f ON e.filiere_id = f.id
+        ORDER BY e.id DESC
+    ");
+    $etudiants = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>
+
+    <?php if (count($etudiants) > 0): ?>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Filière</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($etudiants as $etudiant): ?>
+            <tr>
+                <td><?= $etudiant['id'] ?></td>
+                <td><?= htmlspecialchars($etudiant['nom']) ?></td>
+                <td><?= htmlspecialchars($etudiant['prenom']) ?></td>
+                <td><?= htmlspecialchars($etudiant['filiere']) ?></td>
+                <td class="actions">
+                    <a href="update.php?id=<?= $etudiant['id'] ?>" class="btn btn-edit">Modifier</a>
+                    <a href="delete.php?id=<?= $etudiant['id'] ?>" class="btn btn-delete" onclick="return confirmerSuppression()">Supprimer</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php else: ?>
+        <p class="empty">Aucun étudiant enregistré pour le moment.</p>
+    <?php endif; ?>
+</div>
 
     </div>
 
