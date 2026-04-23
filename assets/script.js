@@ -30,3 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+function confirmerSuppression() {
+    return confirm("Êtes-vous sûr de vouloir supprimer cet étudiant ?");
+}
